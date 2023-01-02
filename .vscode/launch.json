@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/BilingualMangaReaderScraper/bin/Debug/net7.0/BilingualMangaReaderScraper.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/BilingualMangaReaderScraper",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "Docker .NET Core Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/BilingualMangaReaderScraper/BilingualMangaReaderScraper.csproj"
+            }
+        }
+    ]
+}
