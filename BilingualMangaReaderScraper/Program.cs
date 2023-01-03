@@ -1,4 +1,6 @@
-﻿namespace BilingualMangaReaderScraper;
+﻿using BilingualMangaReaderScraper.Services;
+
+namespace BilingualMangaReaderScraper;
 
 public class Program
 {
@@ -8,6 +10,9 @@ public class Program
             .ConfigureServices(services =>
             {
                 services.AddHostedService<Worker>();
+
+                services.AddTransient<IMangaScraperService, MangaScraperService>();
+
             })
             .Build();
 

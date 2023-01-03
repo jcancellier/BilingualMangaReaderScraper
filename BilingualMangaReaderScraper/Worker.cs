@@ -1,12 +1,17 @@
-﻿namespace BilingualMangaReaderScraper;
+﻿using BilingualMangaReaderScraper.Services;
+
+namespace BilingualMangaReaderScraper;
 
 public class Worker : BackgroundService
 {
+    
     private readonly ILogger<Worker> _logger;
+    private readonly IMangaScraperService _mangaScraperService;
 
-    public Worker(ILogger<Worker> logger)
+    public Worker(ILogger<Worker> logger, IMangaScraperService mangaScraperService)
     {
         _logger = logger;
+        _mangaScraperService = mangaScraperService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -14,7 +19,10 @@ public class Worker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            await Task.Delay(1000, stoppingToken);
+
+            _mangaScraperService.Scrape();
+
+            await Task.Delay(3600000, stoppingToken);
         }
     }
 }
