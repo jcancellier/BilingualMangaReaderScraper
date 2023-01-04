@@ -1,5 +1,5 @@
 ﻿using BilingualMangaReaderScraper.Services;
-
+using Serilog;
 namespace BilingualMangaReaderScraper;
 
 public class Program
@@ -12,7 +12,14 @@ public class Program
                 services.AddHostedService<Worker>();
 
                 services.AddTransient<IMangaScraperService, MangaScraperService>();
-
+            })
+            .UseSerilog((hostingContext, loggerConfiguration) => 
+            {
+                loggerConfiguration
+                    .ReadFrom.Configuration(hostingContext.Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console()
+                    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day);
             })
             .Build();
 

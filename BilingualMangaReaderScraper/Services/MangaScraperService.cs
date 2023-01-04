@@ -1,4 +1,5 @@
 ﻿using BilingualMangaReaderScraper.Models;
+using BilingualMangaReaderScraper.Utilities;
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
 using OpenQA.Selenium;
@@ -44,19 +45,41 @@ namespace BilingualMangaReaderScraper.Services
             // 1. New MangaIds
             // 2. New content for mangas (volumes/chapters)
 
-            // Get manga data
-            foreach (var mangaId in mangaIds)
-            {
-                var scrapedMangeEntryEnglish = ScrapeMangaData(mangaId, web, doc, Languages.English);
-                var scrapedMangeEntryJapanese = ScrapeMangaData(mangaId, web, doc, Languages.Japanese);
+            // load manga web page with selenium since it is a dynamic web page
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArgument("--headless");
 
-                _logger.LogInformation(scrapedMangeEntryEnglish.ToString());
-                _logger.LogInformation(scrapedMangeEntryJapanese.ToString());
+            var scrapedMangaEntries = new List<ScrapedMangaEntry>();
+            using (var driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(), chromeOptions))
+            {
+                // Get manga data
+                foreach (var mangaId in mangaIds)
+                {
+                    try 
+                    {
+                        var scrapedMangaEntryEnglish = 
+                            ScrapeMangaData(mangaId, web, doc, driver, Languages.English);
+                        var scrapedMangaEntryJapanese = 
+                            ScrapeMangaData(mangaId, web, doc, driver, Languages.Japanese);
+
+                        scrapedMangaEntries.Add(scrapedMangaEntryEnglish);
+                        scrapedMangaEntries.Add(scrapedMangaEntryJapanese);
+
+                        _logger.LogInformation(scrapedMangaEntryEnglish.ToStringEx());
+                        _logger.LogInformation(scrapedMangaEntryJapanese.ToStringEx());
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.LogError(ex, $"Exception occured while scraping for manga id {mangaId}");
+                        // TODO send notification/email when errors occur
+                        // TODO implement remote logging with something like aws
+                    }
+                }
             }
         }
 
         private ScrapedMangaEntry ScrapeMangaData(
-            string mangaId, HtmlWeb web, HtmlDocument doc, Languages language)
+            string mangaId, HtmlWeb web, HtmlDocument doc, ChromeDriver driver, Languages language)
         {
             var languageString = language switch
             {
@@ -65,34 +88,39 @@ namespace BilingualMangaReaderScraper.Services
                 _ => "en"
             };
 
-            // load manga web page with selenium since it is a dynamic web page
-            var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArgument("--headless");
+            driver.Navigate().GoToUrl($"{BASE_URL}/manga/{mangaId}?lang={languageString}");
 
-            string html;
-            using (var driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(), chromeOptions))
-            {
-                driver.Navigate().GoToUrl($"{BASE_URL}/manga/{mangaId}?lang={languageString}");
+            // Wait for the page to load
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var element = wait.Until(d => d.FindElement(By.Id(MangaHtmlElements.CHAPTER_LIST_CONTAINER_ID)));
 
-                // Wait for the page to load
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                var element = wait.Until(d => d.FindElement(By.Id(MangaHtmlElementIds.CHAPTER_LIST_CONTAINER)));
+            string html = driver.PageSource;
 
-                html = driver.PageSource;
-            }
-
-            // parse html for manga data
+            // parse html for manga metadata
             doc.LoadHtml(html);
 
-            var mangaName = doc.GetElementbyId(MangaHtmlElementIds.TITLE).InnerHtml;
-            var description = doc.DocumentNode.QuerySelector(MangaHtmlElementIds.DESCRIPTION_SELECTOR).InnerText;
+            var mangaName = doc.GetElementbyId(MangaHtmlElements.TITLE_ID).InnerHtml;
+            var description = doc.DocumentNode.QuerySelector(MangaHtmlElements.DESCRIPTION_SELECTOR).InnerText;
+            var author = doc.DocumentNode.QuerySelector(MangaHtmlElements.AUTHOR_SELECTOR).InnerText;
+            var artist = doc.DocumentNode.QuerySelector(MangaHtmlElements.ARTIST_SELECTOR).InnerText;
+            var releaseYear = doc.DocumentNode.QuerySelector(MangaHtmlElements.RELEASE_YEAR_SELECTOR).InnerText;
+            var completionStatus = doc.DocumentNode.QuerySelector(MangaHtmlElements.COMPLETED_SELECTOR).InnerText;
+            
+            var genresContainer = doc.DocumentNode.QuerySelector(MangaHtmlElements.GENRES_LIST_CONTAINER_SELECTOR);
+            var genreNodes = genresContainer.SelectNodes(".//a");
+            var genres = genreNodes.Select(x => x.InnerText).ToList();
 
             return new ScrapedMangaEntry()
             {
                 Id = mangaId,
                 Name = mangaName,
                 Language = language,
-                Description = description
+                Description = description,
+                Author = author,
+                Artist = artist,
+                ReleaseYear = Convert.ToInt32(releaseYear),
+                CompletionStatus = completionStatus,
+                Genres = genres
             };
         }
 
