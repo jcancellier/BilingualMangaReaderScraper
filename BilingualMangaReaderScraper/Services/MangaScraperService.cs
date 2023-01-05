@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
 
@@ -47,11 +48,15 @@ namespace BilingualMangaReaderScraper.Services
 
             // load manga web page with selenium since it is a dynamic web page
             var chromeOptions = new ChromeOptions();
+            
+            // TODO control this with appsettings
             chromeOptions.AddArgument("--headless");
 
             var scrapedMangaEntries = new List<ScrapedMangaEntry>();
-            using (var driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(), chromeOptions))
+            using (var driver = new RemoteWebDriver(new Uri("http://host.docker.internal:4444"), chromeOptions))
             {
+                driver.Manage().Window.Maximize();
+
                 // Get manga data
                 foreach (var mangaId in mangaIds)
                 {
@@ -79,7 +84,7 @@ namespace BilingualMangaReaderScraper.Services
         }
 
         private ScrapedMangaEntry ScrapeMangaData(
-            string mangaId, HtmlWeb web, HtmlDocument doc, ChromeDriver driver, Languages language)
+            string mangaId, HtmlWeb web, HtmlDocument doc, IWebDriver driver, Languages language)
         {
             var languageString = language switch
             {
