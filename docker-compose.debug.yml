@@ -9,3 +9,12 @@ services:
       dockerfile: BilingualMangaReaderScraper/Dockerfile
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - standalone-chromium
+  standalone-chromium:
+    ports:
+        - '4444:4444'
+        - '7900:7900'
+        - '5900:5900'
+    image: 'seleniarm/standalone-chromium:latest'
+    shm_size: '2gb'
