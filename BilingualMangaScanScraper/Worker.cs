@@ -1,6 +1,6 @@
-﻿using BilingualMangaReaderScraper.Services;
+﻿using BilingualMangaScanScraper.Services;
 
-namespace BilingualMangaReaderScraper;
+namespace BilingualMangaScanScraper;
 
 public class Worker : BackgroundService
 {

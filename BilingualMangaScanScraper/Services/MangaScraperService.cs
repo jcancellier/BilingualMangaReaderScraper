@@ -1,5 +1,5 @@
-﻿using BilingualMangaReaderScraper.Models;
-using BilingualMangaReaderScraper.Utilities;
+﻿using BilingualMangaScanScraper.Models;
+using BilingualMangaScanScraper.Utilities;
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
 using OpenQA.Selenium;
@@ -8,7 +8,7 @@ using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using System.Text.RegularExpressions;
 
-namespace BilingualMangaReaderScraper.Services
+namespace BilingualMangaScanScraper.Services
 {
     public class MangaScraperService : IMangaScraperService
     {

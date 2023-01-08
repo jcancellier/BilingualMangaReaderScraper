@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1704.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BilingualMangaReaderScraper", "BilingualMangaReaderScraper\BilingualMangaReaderScraper.csproj", "{DC26BA96-569B-4CCD-AEF2-CEED0B9E48D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BilingualMangaScanScraper", "BilingualMangaScanScraper\BilingualMangaScanScraper.csproj", "{DC26BA96-569B-4CCD-AEF2-CEED0B9E48D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

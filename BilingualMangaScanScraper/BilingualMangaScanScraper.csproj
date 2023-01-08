@@ -3,7 +3,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-BilingualMangaReaderScraper-8d51a5e9-44ef-4ce6-b16f-21a9ebf5fa37</UserSecretsId>
+    <UserSecretsId>dotnet-BilingualMangaScanScraper-8d51a5e9-44ef-4ce6-b16f-21a9ebf5fa37</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
