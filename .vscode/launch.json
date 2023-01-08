@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/BilingualMangaReaderScraper/bin/Debug/net7.0/BilingualMangaReaderScraper.dll",
+            "program": "${workspaceFolder}/BilingualMangaScanScraper/bin/Debug/net7.0/BilingualMangaScanScraper.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/BilingualMangaReaderScraper",
+            "cwd": "${workspaceFolder}/BilingualMangaScanScraper",
             "console": "internalConsole",
             "stopAtEntry": false
         },
@@ -23,7 +23,7 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/BilingualMangaReaderScraper/BilingualMangaReaderScraper.csproj"
+                "appProject": "${workspaceFolder}/BilingualMangaScanScraper/BilingualMangaScanScraper.csproj"
             }
         }
     ]

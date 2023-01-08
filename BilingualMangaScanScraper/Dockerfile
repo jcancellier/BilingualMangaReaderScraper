@@ -8,16 +8,16 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["BilingualMangaReaderScraper/BilingualMangaReaderScraper.csproj", "BilingualMangaReaderScraper/"]
-RUN dotnet restore "BilingualMangaReaderScraper/BilingualMangaReaderScraper.csproj"
+COPY ["BilingualMangaScanScraper/BilingualMangaScanScraper.csproj", "BilingualMangaScanScraper/"]
+RUN dotnet restore "BilingualMangaScanScraper/BilingualMangaScanScraper.csproj"
 COPY . .
-WORKDIR "/src/BilingualMangaReaderScraper"
-RUN dotnet build "BilingualMangaReaderScraper.csproj" -c Release -o /app/build
+WORKDIR "/src/BilingualMangaScanScraper"
+RUN dotnet build "BilingualMangaScanScraper.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "BilingualMangaReaderScraper.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "BilingualMangaScanScraper.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BilingualMangaReaderScraper.dll"]
+ENTRYPOINT ["dotnet", "BilingualMangaScanScraper.dll"]

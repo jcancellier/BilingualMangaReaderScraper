@@ -1,6 +1,6 @@
-﻿using BilingualMangaReaderScraper.Services;
+﻿using BilingualMangaScanScraper.Services;
 using Serilog;
-namespace BilingualMangaReaderScraper;
+namespace BilingualMangaScanScraper;
 
 public class Program
 {

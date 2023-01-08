@@ -2,7 +2,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text;
 
-namespace BilingualMangaReaderScraper.Utilities
+namespace BilingualMangaScanScraper.Utilities
 {
     public static class ObjectExtensions
     {

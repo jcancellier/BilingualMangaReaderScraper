@@ -1,4 +1,4 @@
-namespace BilingualMangaReaderScraper.Services
+namespace BilingualMangaScanScraper.Services
 {
 	public interface IMangaScraperService
 	{

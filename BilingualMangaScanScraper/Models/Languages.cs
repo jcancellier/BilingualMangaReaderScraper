@@ -1,4 +1,4 @@
-namespace BilingualMangaReaderScraper.Models
+namespace BilingualMangaScanScraper.Models
 {
     public enum Languages
     {
