@@ -10,16 +10,16 @@ using System.Text.RegularExpressions;
 
 namespace BilingualMangaScanScraper.Services
 {
-	public class MangaScraperService : IMangaScraperService
-	{
+    public class MangaScraperService : IMangaScraperService
+    {
 
         private string MANGA_ID_REGEX_PATTERN = @"enid:\s*""([^""]+)""";
         private string BASE_URL = "https://bilingualmanga.net";
 
         ILogger<MangaScraperService> _logger;
 
-		public MangaScraperService(ILogger<MangaScraperService> logger)
-		{
+        public MangaScraperService(ILogger<MangaScraperService> logger)
+        {
             _logger = logger;
         }
 
@@ -60,11 +60,11 @@ namespace BilingualMangaScanScraper.Services
                 // Get manga data
                 foreach (var mangaId in mangaIds)
                 {
-                    try 
+                    try
                     {
-                        var scrapedMangaEntryEnglish = 
+                        var scrapedMangaEntryEnglish =
                             ScrapeMangaData(mangaId, web, doc, driver, Languages.English);
-                        var scrapedMangaEntryJapanese = 
+                        var scrapedMangaEntryJapanese =
                             ScrapeMangaData(mangaId, web, doc, driver, Languages.Japanese);
 
                         scrapedMangaEntries.Add(scrapedMangaEntryEnglish);
@@ -73,7 +73,7 @@ namespace BilingualMangaScanScraper.Services
                         _logger.LogInformation(scrapedMangaEntryEnglish.ToStringEx());
                         _logger.LogInformation(scrapedMangaEntryJapanese.ToStringEx());
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _logger.LogError(ex, $"Exception occured while scraping for manga id {mangaId}");
                         // TODO send notification/email when errors occur
@@ -110,7 +110,7 @@ namespace BilingualMangaScanScraper.Services
             var artist = doc.DocumentNode.QuerySelector(MangaHtmlElements.ARTIST_SELECTOR).InnerText;
             var releaseYear = doc.DocumentNode.QuerySelector(MangaHtmlElements.RELEASE_YEAR_SELECTOR).InnerText;
             var completionStatus = doc.DocumentNode.QuerySelector(MangaHtmlElements.COMPLETED_SELECTOR).InnerText;
-            
+
             var genresContainer = doc.DocumentNode.QuerySelector(MangaHtmlElements.GENRES_LIST_CONTAINER_SELECTOR);
             var genreNodes = genresContainer.SelectNodes(".//a");
             var genres = genreNodes.Select(x => x.InnerText).ToList();
@@ -132,7 +132,7 @@ namespace BilingualMangaScanScraper.Services
         private IEnumerable<string> ExtractMangaIds(string data, string pattern)
         {
             var matches = Regex.Matches(data, pattern);
-            
+
             HashSet<string> mangaIds = new HashSet<string>();
 
             foreach (Match match in matches)
@@ -142,6 +142,6 @@ namespace BilingualMangaScanScraper.Services
 
             return mangaIds.AsEnumerable();
         }
-	}
+    }
 }
 
