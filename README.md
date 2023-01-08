@@ -1,4 +1,4 @@
-# BilingualMangaReaderScraper
+# BilingualMangaScanScraper
 
 Scraper for collecting raw manga scans in both English and Japanese
 
